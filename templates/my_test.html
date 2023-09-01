@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RPG Web Game</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>RPG Web Game</h1>
+  <p>Welcome to the RPG adventure!</p>
+  <button id="startButton">Start Game</button>
+  <div id="gameContainer" style="display: none;">
+    <h2>Player Stats</h2>
+    <p>Health: <span id="playerHealth">100</span></p>
+    <h2>Monsters</h2>
+    <p>Health: <span id="monsterHealth">50</span></p>
+    <button id="attackButton">Attack</button>
+    <button id="useItemButton">Use Item</button>
+  </div>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+    const gameContainer = document.getElementById("gameContainer");
+    const playerHealthSpan = document.getElementById("playerHealth");
+    const monsterHealthSpan = document.getElementById("monsterHealth");
+    const attackButton = document.getElementById("attackButton");
+    const useItemButton = document.getElementById("useItemButton");
+
+    let playerHealth = 100;
+    let monsterHealth = 50;
+
+    function updatePlayerHealth() {
+      playerHealthSpan.textContent = playerHealth;
+    }
+
+    function updateMonsterHealth() {
+      monsterHealthSpan.textContent = monsterHealth;
+    }
+
+    function attackMonster() {
+      const damage = Math.floor(Math.random() * 10) + 1;
+      monsterHealth -= damage;
+      if (monsterHealth <= 0) {
+        alert("You defeated the monster!");
+        resetGame();
+      } else {
+        monsterAttack();
+      }
+      updateMonsterHealth();
+    }
+
+    function monsterAttack() {
+      const damage = Math.floor(Math.random() * 8) + 1;
+      playerHealth -= damage;
+      if (playerHealth <= 0) {
+        alert("Game Over. The monster defeated you.");
+        resetGame();
+      }
+      updatePlayerHealth();
+    }
+
+    function useItem() {
+      const healAmount = Math.floor(Math.random() * 15) + 5;
+      playerHealth += healAmount;
+      if (playerHealth > 100) {
+        playerHealth = 100;
+      }
+      monsterAttack();
+      updatePlayerHealth();
+    }
+
+    function resetGame() {
+      playerHealth = 100;
+      monsterHealth = 50;
+      updatePlayerHealth();
+      updateMonsterHealth();
+      gameContainer.style.display = "none";
+      startButton.style.display = "block";
+    }
+
+    startButton.addEventListener("click", () => {
+      startButton.style.display = "none";
+      gameContainer.style.display = "block";
+      updatePlayerHealth();
+      updateMonsterHealth();
+    });
+
+    attackButton.addEventListener("click", attackMonster);
+    useItemButton.addEventListener("click", useItem);
+  </script>
+</body>
+</html>
